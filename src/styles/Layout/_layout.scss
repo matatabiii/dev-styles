@@ -1,0 +1,69 @@
+/*////////////////////////////
+
+@layout/layout
+
+////////////////////////////*/
+// 【必須】variable, functions, mixins 読み込み
+@use '../foundation/variable' as *;
+@use '../foundation/functions' as *;
+@use '../foundation/mixins' as *;
+/*! purgecss start ignore */
+
+.l-body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  // .l-body--2col
+  &--2col {
+    $containerMainSub: width('container') + $gutter + $gutter;
+    .l-container {
+      width: rem($containerMainSub);
+      max-width: 100%;
+      margin: 0 auto;
+      padding: rem(80) $gutter rem(70px) $gutter;
+
+      @include over('lg') {
+        display: flex;
+        padding: rem(80) $gutter rem(100) $gutter;
+      }
+    }
+    .l-main {
+      @include over("lg") {
+        $padding-right: rem(40);
+        width: rem(840);
+        padding-right: $padding-right;
+      }
+      @include break('lg') {
+        padding-bottom: rem(70);
+      }
+    }
+    .l-side {
+      @include over("lg") {
+        flex: 0 0 auto;
+        width: width("sub");
+      }
+    }
+  }
+}
+
+.l-header {
+  flex: 0 0 auto;
+}
+
+.l-container {
+  flex: 1 1 auto;
+}
+
+.l-footer {
+  flex: 0 0 auto;
+}
+
+/// スクロール方向によってサイドバーの位置を調整
+@include over("lg") {
+  #side-inner {
+    position: sticky;
+    top: 20px;
+  }
+}
+/*! purgecss end ignore */

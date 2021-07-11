@@ -1,0 +1,164 @@
+/*////////////////////////////
+@utility/border
+////////////////////////////*/
+@use "sass:math";
+@use '../foundation/variable' as *;
+@use '../foundation/functions' as *;
+@use '../foundation/mixins' as *;
+
+$borderWidthMax: 10;
+$borderRadiusMax: 30;
+$colorMap: $color-map; // _variable.scss で設定
+
+@mixin _border($prefix: "") {
+  .#{$prefix}u-radius {
+    border-radius: 50%;
+  }
+}
+
+.u-border-solid {
+  border-style: solid;
+}
+
+.u-border-dotted {
+  border-style: dotted;
+}
+
+.u-border-dashed {
+  border-style: dashed;
+}
+
+.u-border-double {
+  border-style: double;
+}
+
+.u-border-hidden {
+  border-style: hidden;
+}
+.u-border-hidden-top {
+  border-top-style: hidden;
+}
+.u-border-hidden-right {
+  border-right-style: hidden;
+}
+.u-border-hidden-bottom{
+  border-bottom-style: hidden;
+}
+.u-border-hidden-left {
+  border-left-style: hidden;
+}
+
+@mixin _borderOther($prefix: "") {
+  @for $i from 0 through $borderWidthMax {
+    .#{$prefix}u-border-#{$i} {
+      border-width: $i + px;
+    }
+    // .#{$prefix}u-borderTopWidth-#{$i} {
+    //   border-top-width: rem($i);
+    // }
+    // .#{$prefix}u-borderRightWidth-#{$i} {
+    //   border-right-width: rem($i);
+    // }
+    // .#{$prefix}u-borderBottomWidth-#{$i} {
+    //   border-bottom-width: rem($i);
+    // }
+    // .#{$prefix}u-borderLeftWidth-#{$i} {
+    //   border-left-width: rem($i);
+    // }
+  }
+
+  // .#{$prefix}u-borderTopStyle-solid {
+  //   border-top-style: solid;
+  // }
+  // .#{$prefix}u-borderRightStyle-solid {
+  //   border-right-style: solid;
+  // }
+  // .#{$prefix}u-borderBottomStyle-solid {
+  //   border-bottom-style: solid;
+  // }
+  // .#{$prefix}u-borderLeftStyle-solid {
+  //   border-left-style: solid;
+  // }
+  // .#{$prefix}u-borderTopStyle-dotted {
+  //   border-top-style: dotted;
+  // }
+  // .#{$prefix}u-borderRightStyle-dotted {
+  //   border-right-style: dotted;
+  // }
+  // .#{$prefix}u-borderBottomStyle-dotted {
+  //   border-bottom-style: dotted;
+  // }
+  // .#{$prefix}u-borderLeftStyle-dotted {
+  //   border-left-style: dotted;
+  // }
+  // .#{$prefix}u-borderTopStyle-dashed {
+  //   border-top-style: dashed;
+  // }
+  // .#{$prefix}u-borderRightStyle-dashed {
+  //   border-right-style: dashed;
+  // }
+  // .#{$prefix}u-borderBottomStyle-dashed {
+  //   border-bottom-style: dashed;
+  // }
+  // .#{$prefix}u-borderLeftStyle-dashed {
+  //   border-left-style: dashed;
+  // }
+  // .#{$prefix}u-borderTopStyle-double {
+  //   border-top-style: double;
+  // }
+  // .#{$prefix}u-borderRightStyle-double {
+  //   border-right-style: double;
+  // }
+  // .#{$prefix}u-borderBottomStyle-double {
+  //   border-bottom-style: double;
+  // }
+  // .#{$prefix}u-borderLeftStyle-double {
+  //   border-left-style: double;
+  // }
+  // .#{$prefix}u-borderTopStyle-hidden {
+  //   border-top-style: hidden;
+  // }
+  // .#{$prefix}u-borderRightStyle-hidden {
+  //   border-right-style: hidden;
+  // }
+  // .#{$prefix}u-borderBottomStyle-hidden {
+  //   border-bottom-style: hidden;
+  // }
+  // .#{$prefix}u-borderLeftStyle-hidden {
+  //   border-left-style: hidden;
+  // }
+
+  @each $key, $color in $colorMap {
+    .#{$prefix}u-border-#{$key} {
+      border-color: color($key);
+    }
+  }
+
+
+  @for $iR from 1 through $borderRadiusMax {
+    // $rVar: $iR * 2;
+    .u-radius-#{$iR} {
+      border-radius: $iR + px;
+    }
+  }
+
+  .#{$prefix}u-radius-500 {
+    border-radius: rem(500);
+  }
+}
+
+@include _border();
+@include _borderOther();
+
+@each $screen in $screen-list-min {
+  $prefix: str-slice($screen, 0, 1);
+
+  // $prefixBreak: "#{$prefix}\\:";
+  // @include break($screen) {
+  // }
+
+  $prefixOver: "#{to-upper-case($prefix)}\\:";
+  @include over($screen) {
+    @include _border($prefixOver);
+  }
+}

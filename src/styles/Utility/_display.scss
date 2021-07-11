@@ -1,0 +1,15 @@
+/*////////////////////////////
+@utility/display
+////////////////////////////*/
+@use "sass:math";
+@use '../foundation/variable' as *;
+@use '../foundation/functions' as *;
+@use '../foundation/mixins' as *;
+
+.u-ib {
+  display: inline-block;
+}
+
+.u-b {
+  display: block;
+}

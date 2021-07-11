@@ -1,0 +1,82 @@
+/*////////////////////////////
+@component/c
+////////////////////////////*/
+@use 'sass:color';
+@use 'sass:math';
+@use '../foundation/variable' as *;
+@use '../foundation/functions' as *;
+@use '../foundation/mixins' as *;
+
+/*! purgecss start ignore */
+// list reset
+.c-list {
+  padding-left: 0;
+  list-style: none;
+}
+
+// アイコン
+.c-icon {
+  overflow: visible;
+  display: inline;
+  fill: currentColor;
+  stroke-width: 0;
+  stroke: currentColor;
+  position: relative;
+  font-size: inherit;
+  vertical-align: -0.125em;
+  text-indent: 0;
+  flex: 0 0 auto;
+}
+
+// クリアーフィックス
+.c-cf {
+  @include cf;
+}
+
+// 動画
+.c-movie {
+  position: relative;
+  height: 0;
+  overflow: hidden;
+  padding-bottom: math.div(9, 16) * 100%; // 56.25%
+
+  > * {
+    border: none;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+
+  // .c-movie--4x3
+  &--4x3 {
+    padding-bottom: math.div(3, 4) * 100%; // 75%
+  }
+}
+
+// アンダーライン付きリンクにする
+.c-anchor {
+  color: color("theme");
+
+  &[href] {
+    text-decoration: underline;
+  }
+
+  [class].c-icon {
+    vertical-align: -0.15em;
+  }
+
+  @include action {
+    text-decoration: none;
+  }
+}
+
+/// スパム防止
+.c-atmark {
+  &::before {
+    content: "@";
+  }
+}
+
+/*! purgecss end ignore */

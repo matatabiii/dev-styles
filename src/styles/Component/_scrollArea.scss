@@ -1,0 +1,81 @@
+/*////////////////////////////
+@component/scrollArea
+////////////////////////////*/
+@use 'sass:color';
+@use 'sass:math';
+@use '../foundation/variable' as *;
+@use '../foundation/functions' as *;
+@use '../foundation/mixins' as *;
+
+@mixin _scrollArea($prefix: "") {
+  .#{$prefix}c-scroll-area {
+    overflow-style: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar,
+    &::-webkit-scrollbar-track,
+    &::-webkit-scrollbar-thumb {
+      height: 0;
+      width: 0;
+      display: none;
+      background: transparent;
+    }
+
+    overflow-x: auto;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    -webkit-overflow-scrolling: touch;
+
+    > * {
+      min-width: width("main");
+      background-repeat: no-repeat;
+      background-attachment: local;
+      border-collapse: collapse;
+    }
+  }
+
+  .#{$prefix}c-scrollbar-less {
+    -ms-overflow-style: none;    /* IE, Edge 対応 */
+    scrollbar-width: none;       /* Firefox 対応 */
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+  }
+}
+
+
+/* //////////////////////////////////////////
+- スクロールエリア補助テキスト
+- 基本 c-scroll-area とセットで使う
+
+```
+<p class="c-mb15  M:u-hidden  c-scroll-area-help">
+  ※下表は画面に収まらない場合、左右にスライドしてご覧いただけます。
+</p>
+
+<p class="c-mt15  M:u-hidden  c-scroll-area-help">
+  ※上表は画面に収まらない場合、左右にスライドしてご覧いただけます。
+</p>
+```
+////////////////////////////////////////// */
+.c-scroll-area-help {
+  background: rgba(color("theme"), 0.2);
+  display: block;
+}
+
+// @include _scrollArea();
+
+@each $screen in $screen-list-min {
+  $prefix: str-slice($screen, 0, 1);
+
+  $prefixBreak: "#{$prefix}\\:";
+  @include break($screen) {
+    @include _scrollArea($prefixBreak);
+  }
+
+  // $prefixOver: "#{to-upper-case($prefix)}\\:";
+  // @include over($screen) {
+  //   @include _scrollArea($prefixOver);
+  // }
+}

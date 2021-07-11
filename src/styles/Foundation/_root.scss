@@ -1,0 +1,27 @@
+@use "./variable" as *;
+@use "./functions" as *;
+@use "./mixins" as *;
+:root {
+  --size: 1.6rem;
+  --weight: 400;
+  --lh: 1.75;
+  $i: 0;
+  @each $screen in $screen-list {
+    @if 0 == $i {
+      --screen: "#{$screen}";
+    } @else {
+      @include break($screen) {
+        --screen: "#{$screen}";
+      }
+    }
+    $i: $i + 1;
+  }
+
+  @each $key, $family in $family-map {
+    --family-#{$key}: #{$family};
+  }
+
+  @each $key, $color in $color-map {
+    --color-#{$key}: #{$color};
+  }
+}

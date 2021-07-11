@@ -1,0 +1,15 @@
+/*////////////////////////////
+@utility/cursor
+////////////////////////////*/
+@use "sass:math";
+@use '../foundation/variable' as *;
+@use '../foundation/functions' as *;
+@use '../foundation/mixins' as *;
+
+// cursor
+.u-pointer {
+  cursor: pointer;
+}
+.u-not-allowed {
+  cursor: not-allowed;
+}

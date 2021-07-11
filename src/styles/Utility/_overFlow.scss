@@ -1,0 +1,28 @@
+/*////////////////////////////
+@utility/overflow
+////////////////////////////*/
+@use "sass:math";
+@use '../foundation/variable' as *;
+@use '../foundation/functions' as *;
+@use '../foundation/mixins' as *;
+
+@mixin _overFlow($prefix: "") {
+  .#{$prefix}u-of-hidden {
+      overflow: hidden;
+  }
+}
+
+@include _overFlow();
+
+@each $screen in $screen-list-min {
+  $prefix: str-slice($screen, 0, 1);
+
+  // $prefixBreak: "#{$prefix}\\:";
+  // @include break($screen) {
+  // }
+
+  $prefixOver: "#{to-upper-case($prefix)}\\:";
+  @include over($screen) {
+    @include _overFlow($prefixOver);
+  }
+}

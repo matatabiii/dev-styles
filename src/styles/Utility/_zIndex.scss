@@ -1,0 +1,46 @@
+/*////////////////////////////
+@utility/z-index
+////////////////////////////*/
+@use "sass:math";
+@use '../foundation/variable' as *;
+@use '../foundation/functions' as *;
+@use '../foundation/mixins' as *;
+
+@mixin _zIndex($prefix: "") {
+  .#{$prefix}u-z-0 {
+    z-index: 0;
+  }
+  .#{$prefix}u-z-1 {
+    z-index: 1;
+  }
+  .#{$prefix}u-z-2 {
+    z-index: 2;
+  }
+  .#{$prefix}u-z-3 {
+    z-index: 2;
+  }
+  .#{$prefix}u-z-_1 {
+    z-index: -1;
+  }
+  .#{$prefix}u-z-_2 {
+    z-index: -2;
+  }
+  .#{$prefix}u-z-_3 {
+    z-index: -3;
+  }
+}
+
+@include _zIndex();
+
+// @each $screen in $screen-list-min {
+//   $prefix: str-slice($screen, 0, 1);
+
+//   // $prefixBreak: "#{$prefix}\\:";
+//   // @include break($screen) {
+//   // }
+
+//   $prefixOver: "#{to-upper-case($prefix)}\\:";
+//   @include over($screen) {
+//     @include _zIndex($prefixOver);
+//   }
+// }

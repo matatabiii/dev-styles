@@ -1,0 +1,541 @@
+@use "sass:map"; // sassの機能
+@use "./variable" as *;
+@use "./functions" as *;
+
+// メディアクエリー 解像度
+@mixin retina() {
+  @media screen and (min-resolution: 2dppx) {
+    @content;
+  }
+}
+
+/// Media Queries 指定された幅以下
+/// @param {string, number} $screen    スクリーン名か数値
+/// @param {string}         $direction 横か縦か両方か
+@mixin break($screen, $direction: width) {
+  $screen: screen-match($screen);
+  $value: $screen - 0.02;
+  @if (width == $direction or height == $direction) {
+    @media screen and (max-#{$direction}: $value) {
+      @content;
+    }
+  } @else if (both == $direction) {
+    @media screen and (max-width: $value), (max-height: $value) {
+      @content;
+    }
+  }
+}
+
+/// Media Queries 指定された幅以上
+/// @param {string, number} $screen    スクリーン名か数値
+/// @param {string}         $direction 横か縦か両方か
+@mixin over($screen, $direction: width) {
+  $screen: screen-match($screen);
+  $value: $screen;
+  @if (width == $direction or height == $direction) {
+    @media print, screen and (min-#{$direction}: $value) {
+      @content;
+    }
+  } @else if (both == $direction) {
+    @media print, screen and (min-width: $value), (min-height: $value) {
+      @content;
+    }
+  }
+}
+
+///メディアクエリー Orientation
+@mixin landscape {
+  @media (orientation: landscape) {
+    @content;
+  }
+}
+
+@mixin portrait {
+  @media (orientation: portrait) {
+    @content;
+  }
+}
+
+@mixin is16-9 {
+  @media (max-aspect-ratio: 16/9) {
+    @content;
+  }
+}
+
+@mixin is4-3 {
+  @media (max-aspect-ratio: 4/3) {
+    @content;
+  }
+}
+
+/// 背景画像 (Retina 対応)
+/// @param {string} $src       普通サイズの画像の URL (必須)
+/// @param {string} $size      普通サイズの画像の横幅 (無い場合は auto)
+/// @param {string} $repeat    繰り返し指定 (無い場合は no-repeat)
+/// @param {number} $x         X軸 (無い場合は 0)
+/// @param {number} $y         Y軸 (無い場合は 0)
+/// @param {string} $retina    Retina 対応するか
+/// @param {string} $screen    ┣ スクリーンに依存するか
+/// @param {string} $direction ┗ スクリーンの方向性
+/// @param {string} $query     キャッシュ回避を目的としたクエリーを付けるか
+@mixin bg(
+  $src,
+  $size: null,
+  $repeat: null,
+  $x: null,
+  $y: null,
+  $retina: true,
+  $screen: null,
+  $direction: null,
+  $query: ""
+) {
+  $_src: $src;
+  $_src-x2: str-insert($_src, "@2x", -5);
+  $_size: null;
+  $_repeat: null;
+  $_x: null;
+  $_y: null;
+
+  @if str-index($src, "/") {
+    $_src: $src;
+    $_src-x2: str-insert($_src, "@2x", -5);
+  } @else {
+    $_src: $images + $src;
+    $_src-x2: $images + str-insert($_src, "@2x", -5);
+  }
+
+  @if $query {
+    $_src: $_src + "?#{$query}";
+    $_src-x2: $_src-x2 + "?#{$query}";
+  }
+
+  @if $size {
+    $_size: #{$size};
+  } @else {
+    $_size: contain;
+  }
+
+  @if $repeat {
+    $_repeat: #{$repeat};
+  } @else {
+    $_repeat: no-repeat;
+  }
+
+  @if $x {
+    $_x: #{$x};
+  } @else {
+    $_x: 0;
+  }
+
+  @if $y {
+    $_y: #{$y};
+  } @else {
+    $_y: 0;
+  }
+
+  background: url($_src) $_repeat $_x $_y/$_size;
+  // background-repeat: $_repeat;
+  // background-position: $_x $_y;
+
+  // @if $size {
+  //   background-size: $_size;
+  // }
+
+  @if $retina {
+    @if $size == null {
+      $_size: contain;
+    }
+    @include retina() {
+      @if $screen and $direction {
+        @if break == $direction {
+          @include _break($screen) {
+            background-image: url($_src-x2);
+            // background-position: $_x $_y;
+            // background-repeat: $_repeat;
+            // background-size: $_size;
+          }
+        } @else if over == $direction {
+          @include _over($screen) {
+            background-image: url($_src-x2);
+            // background-position: $_x $_y;
+            // background-repeat: $_repeat;
+            // background-size: $_size;
+          }
+        }
+      } @else {
+        background-image: url($_src-x2);
+        // background-position: $_x $_y;
+        // background-repeat: $_repeat;
+        // background-size: $_size;
+      }
+    }
+  }
+}
+
+/// ホバー、フォーカス
+/// $element が無ければ指定要素そのものに適用される
+/// @param {string}  $pseudoClass  疑似クラス
+/// @param {boolean} $isPseudoNot  疑似クラスを否定する
+/// @param {boolean} $isSpNot      html:not(.sp) を否定する
+/// @param {string}  $rootClass    ルートのクラス名
+/// @param {string}  $element      ターゲット要素
+/// @param {string}  $parent       親親要
+/// @param {string}  $supportAttr  サポートするクラス名や属性
+/// @param {string}  $decoration   デコレーション
+@mixin action(
+  $pseudoClass: "full",
+  $isPseudoNot: false,
+  $isSpNot: false,
+  $rootClass: null,
+  $element: null,
+  $parent: null,
+  $supportAttr: null,
+  $decoration: $text-decoration-static
+) {
+  @at-root {
+    @include action-closure(
+      $pseudoClass,
+      $isPseudoNot,
+      $isSpNot,
+      $rootClass,
+      $element,
+      $parent,
+      $supportAttr,
+      $decoration
+    ) {
+      @content;
+    }
+  }
+}
+@mixin action-closure($pseudoClass, $isPseudoNot, $isSpNot, $rootClass, $element, $parent, $supportAttr, $decoration) {
+  $_hover: ":hover";
+  $_focus: ":focus";
+  $_support: "#{$supportAttr}";
+  @if $isPseudoNot {
+    $_hover: ":not(:hover)";
+    $_focus: ":not(:focus)";
+    $_support: ":not(#{$supportAttr})";
+  }
+
+  $_html: "html:not(.sp)";
+  @if $isSpNot {
+    $_html: "";
+  }
+
+  @if $parent {
+    @if null == $element {
+      $element: &;
+    }
+    @if "full" == $pseudoClass {
+      #{$_html}#{$rootClass} #{$parent}#{$_hover} #{$element},
+      #{$_html}#{$rootClass} #{$parent}#{$_focus} #{$element} {
+        @content;
+      }
+      #{$_html}#{$rootClass} #{$parent}#{$_hover},
+      #{$_html}#{$rootClass} #{$parent}#{$_focus} {
+        text-decoration: $decoration;
+      }
+    }
+    @if "hover" == $pseudoClass {
+      #{$_html}#{$rootClass} #{$parent}#{$_hover} #{$element} {
+        @content;
+      }
+      #{$_html}#{$rootClass} #{$parent}#{$_hover} {
+        text-decoration: $decoration;
+      }
+    }
+    @if "focus" == $pseudoClass {
+      #{$_html}#{$rootClass} #{$parent}#{$_focus} #{$element} {
+        @content;
+      }
+      #{$_html}#{$rootClass} #{$parent}#{$_focus} {
+        text-decoration: $decoration;
+      }
+    }
+    @if "string" == type-of($supportAttr) {
+      #{$rootClass} #{$parent}#{$_support} #{$element} {
+        @content;
+      }
+      #{$rootClass} #{$parent}#{$_support} {
+        text-decoration: $decoration;
+      }
+    }
+  } @else {
+    $this: #{&};
+    $pseudo: "";
+    @if str-index($this, "::before") {
+      $this: str-slice($this, 0, -9);
+      $pseudo: "::before";
+    }
+    @if str-index($this, ":before") {
+      $this: str-slice($this, 0, -8);
+      $pseudo: ":before";
+    }
+    @if str-index($this, "::after") {
+      $this: str-slice($this, 0, -8);
+      $pseudo: "::after";
+    }
+    @if str-index($this, ":after") {
+      $this: str-slice($this, 0, -7);
+      $pseudo: ":after";
+    }
+    @if "full" == $pseudoClass {
+      #{$_html}#{$rootClass} #{$this}#{$_hover}#{$pseudo} #{$element},
+      #{$_html}#{$rootClass} #{$this}#{$_focus}#{$pseudo} #{$element} {
+        @content;
+      }
+      #{$_html}#{$rootClass} #{$this}#{$_hover} #{$element},
+      #{$_html}#{$rootClass} #{$this}#{$_focus} #{$element} {
+        text-decoration: $decoration;
+      }
+    }
+    @if "hover" == $pseudoClass {
+      #{$_html}#{$rootClass} #{$this}#{$_hover}#{$pseudo} #{$element} {
+        @content;
+      }
+      #{$_html}#{$rootClass} #{$this}#{$_hover} #{$element} {
+        text-decoration: $decoration;
+      }
+    }
+    @if "focus" == $pseudoClass {
+      #{$_html}#{$rootClass} #{$this}#{$_focus}#{$pseudo} #{$element} {
+        @content;
+      }
+      #{$_html}#{$rootClass} #{$this}#{$_focus} #{$element} {
+        text-decoration: $decoration;
+      }
+    }
+    @if "string" == type-of($supportAttr) {
+      #{$rootClass} #{$this}#{$_support}#{$pseudo} #{$element} {
+        @content;
+      }
+      #{$rootClass} #{$this}#{$_support} #{$element} {
+        text-decoration: $decoration;
+      }
+    }
+  }
+}
+
+/// テキストリンク簡易動作
+/// - none         なし
+/// - underline    下線
+/// - overline     上線
+/// - line-through 打ち消し線。
+/// - blink        点滅
+/// @param {boolean} $reverse     逆転 true = する (true の場合、 $static, $dynamic を無視して逆の動作をする)
+/// @param {string}  $static      描画時 none | underline | overline | line-through | blink
+/// @param {string}  $dynamic     アクション時 none | underline | overline | line-through | blink
+/// @param {string}  $supportType サポートするタイプ
+/// @param {boolean} $important   強制フラグ
+@mixin link(
+  $reverse: null,
+  $static: $text-decoration-static,
+  $dynamic: $text-decoration-dynamic,
+  $supportType: null,
+  $important: false
+) {
+  $_important: "";
+  @if ($important) {
+    $_important: " !important";
+  }
+
+  @if true == $reverse {
+    text-decoration: $text-decoration-dynamic #{$_important};
+    @include action($supportAttr: $supportType, $decoration: $dynamic) {
+      text-decoration: $text-decoration-static #{$_important};
+    }
+  } @else {
+    text-decoration: $text-decoration-static #{$_important};
+    @include action($supportAttr: $supportType, $decoration: $dynamic) {
+      text-decoration: $text-decoration-dynamic #{$_important};
+    }
+  }
+}
+
+/// テキストの境界線
+/// 16分割して滑らか感をだす
+/// function _text-outline のラッパー
+/// https://www.chatwork.com/#!rid29164628-1972186661
+/// @param {number} $width        大きさ
+/// @param {string} $color        カラーコード
+/// @param {string} $chain-before 連鎖させる値(前)
+/// @param {string} $chain-after  連鎖させる値(後)
+@mixin text-outline($width: 1px, $color: color("font"), $chain-before: null, $chain-after: null) {
+  text-shadow: text-outline($width, $color, $chain-before, $chain-after);
+}
+
+/// クリアフィックス
+@mixin cf() {
+  &::after {
+    display: block;
+    content: "";
+    clear: both;
+  }
+}
+
+/// コンテナー
+/// @param {number} $width    横幅
+/// @param {string} $property プロパティ名
+/// @param {number} $gutter   溝の値
+/// @param {boolean}   $jsut     $gutterを含めた幅か、ジャストサイズか
+@mixin container($width: width("container"), $property: "width", $gutter: $gutter, $just: false) {
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+
+  $padding: $gutter + $gutter;
+
+  @if $just == false {
+    padding-right: $gutter;
+    padding-left: $gutter;
+    $padding: 0px;
+  }
+
+  @if $property == "max-width" {
+    max-width: $width + $padding
+  } @else if $property == "width" {
+    width: $width + $padding;
+    max-width: 100%;
+  }
+}
+
+/// プレースホルダー
+/// @param {string} $color color
+/// @param {nunmber} $weight font-wegiht
+@mixin placeholder ($color, $weight) {
+  &::-webkit-input-placeholder {
+    color: $color;
+    font-weight: $weight;
+  }
+  &::-moz-placeholder {
+    color: $color;
+    font-weight: $weight;
+  }
+  &:-ms-input-placeholder {
+    color: $color;
+    font-weight: $weight;
+  }
+  &::-ms-input-placeholder {
+    color: $color;
+    font-weight: $weight;
+  }
+}
+
+/// トリガーステータス
+@mixin isOpenDrawer ($className: '.is-open-drawer') {
+  @at-root html#{$className} & {
+    @content;
+  }
+}
+
+/// アクセシビリティ対応
+@mixin isAriaExpanded () {
+  &[aria-expanded="true"] {
+    @content;
+  }
+}
+
+/// アクセシビリティ対応
+@mixin isAriaSelected () {
+  &[aria-selected="true"] {
+    @content;
+  }
+}
+
+/// 1回でもスクロールしたら
+ @mixin isOneScroll () {
+  .js-over-once-scroll & {
+    @content;
+  }
+}
+
+/// ヘッダーを超えたら
+@mixin isOverHeader () {
+  .js-over-header & {
+    @content;
+  }
+}
+
+/// フッターが見えたら
+@mixin isViewFooter () {
+  .js-view-footer & {
+    @content;
+  }
+}
+
+/// スクロールの上か下か
+@mixin isScrollDirection ($mode: 'up') {
+  $directionClass: '.js-direction-up';
+
+  @if ($mode == 'up') {
+    $directionClass: '.js-direction-up';
+  } @else if ($mode == 'down') {
+    $directionClass: '.js-direction-down';
+  }
+
+  #{$directionClass} & {
+    @content;
+  }
+}
+
+/// IE11判定
+@mixin isIE11 () {
+  @at-root _:-ms-lang(x)::-ms-backdrop, & {
+    @content;
+  }
+
+  @at-root html.ie11 & {
+    @content;
+  }
+}
+
+/// Edge判定
+@mixin isEdge () {
+  @at-root _:-ms-lang(x)::backdrop, & {
+    @content;
+  }
+
+  @at-root html.edge & {
+    @content;
+  }
+}
+
+/// 縦書き
+@mixin tategaki () {
+  -webkit-writing-mode: vertical-rl;
+  -ms-writing-mode: tb-rl;
+  writing-mode: vertical-rl;
+  font-feature-settings: normal; // ずれたりする
+}
+
+/// アンチエイリアス有効
+@mixin font-smoothing () {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/// アンチエイリアス無効
+@mixin font-smoothing-n () {
+  -webkit-font-smoothing: subpixel-antialiased;
+  -moz-osx-font-smoothing: auto;
+}
+
+/// otf対象のカーニング
+@mixin karning () {
+  font-feature-settings: "palt" 1;
+}
+
+/// SVGをBase64に変換
+@mixin svgBase64 ($string) {
+  background-image: url('data:image/svg+xml;base64,' + base64($string));
+}
+
+/// スクロールバー非表示
+@mixin scrollbar-less () {
+  -ms-overflow-style: none;    /* IE, Edge 対応 */
+  scrollbar-width: none;       /* Firefox 対応 */
+
+  &::-webkit-scrollbar {
+      display: none;
+  }
+}

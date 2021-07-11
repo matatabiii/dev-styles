@@ -1,0 +1,280 @@
+/*////////////////////////////
+@utility/text
+////////////////////////////*/
+@use "sass:math";
+@use '../foundation/variable' as *;
+@use '../foundation/functions' as *;
+@use '../foundation/mixins' as *;
+
+/*! purgecss start ignore */
+
+// font-family
+@each $keyF, $family in $family-map {
+  .u-family-#{$keyF} {
+    font-family: family($keyF);
+  }
+}
+
+// font-weight
+.u-100 {
+  font-weight: 100;
+}
+.u-200 {
+  font-weight: 200;
+}
+.u-300 {
+  font-weight: 300;
+}
+.u-400 {
+  font-weight: 400;
+}
+.u-500 {
+  font-weight: 500;
+}
+.u-600 {
+  font-weight: 600;
+}
+.u-700 {
+  font-weight: 700;
+}
+.u-800 {
+  font-weight: 800;
+}
+.u-900 {
+  font-weight: 900;
+}
+
+// font-style
+.u-normal {
+  font-style: normal;
+}
+.u-italic {
+  font-style: italic;
+}
+
+// text-transform
+.u-uppercase {
+  text-transform: uppercase;
+}
+.u-lowercase {
+  text-transform: lowercase;
+}
+
+// アンチエイリアス
+.u-font-smoothing {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// アンチエイリアス - none
+.u-font-smoothing-n {
+  -webkit-font-smoothing: subpixel-antialiased;
+  -moz-osx-font-smoothing: auto;
+}
+
+// font-feature-settings
+.u-feature-palt {
+  font-feature-settings: "palt" 1;
+}
+.u-feature-normal {
+  font-feature-settings: normal;
+}
+
+// line-height
+.u-lh {
+  line-height: normal;
+}
+.u-lh10 {
+  line-height: 1;
+}
+.u-lh11 {
+  line-height: 1.1;
+}
+.u-lh12 {
+  line-height: 1.2;
+}
+.u-lh13 {
+  line-height: 1.3;
+}
+.u-lh14 {
+  line-height: 1.4;
+}
+.u-lh15 {
+  line-height: 1.5;
+}
+.u-lh153 {
+  line-height: 1.53;
+}
+.u-lh16 {
+  line-height: 1.6;
+}
+.u-lh17 {
+  line-height: 1.7;
+}
+.u-lh175 {
+  line-height: 1.75;
+}
+.u-lh18 {
+  line-height: 1.8;
+}
+.u-lh19 {
+  line-height: 1.9;
+}
+.u-lh20 {
+  line-height: 2;
+}
+.u-lh21 {
+  line-height: 2.1;
+}
+.u-lh22 {
+  line-height: 2.2;
+}
+.u-lh23 {
+  line-height: 2.3;
+}
+.u-lh24 {
+  line-height: 2.4;
+}
+.u-lh25 {
+  line-height: 2.5;
+}
+.u-lh26 {
+  line-height: 2.6;
+}
+.u-lh27 {
+  line-height: 2.7;
+}
+.u-lh28 {
+  line-height: 2.8;
+}
+.u-lh29 {
+  line-height: 2.9;
+}
+.u-lh30 {
+  line-height: 3;
+}
+
+// letter-spacing
+$ls-map: (
+  "10": 10,
+  "20": 20,
+  "30": 30,
+  "40": 40,
+  "50": 50,
+  "60": 60,
+  "65": 65,
+  "70": 70,
+  "75": 75,
+  "80": 80,
+  "85": 85,
+  "90": 90,
+  "95": 95,
+  "100": 100,
+  "110": 110,
+  "120": 120,
+  "130": 130,
+  "140": 140,
+  "150": 150,
+  "160": 160,
+  "170": 170,
+  "180": 180,
+  "190": 190,
+  "200": 200,
+  "300": 300,
+  "400": 400,
+  "500": 500,
+  "600": 600,
+);
+.u-ls {
+  letter-spacing: normal;
+}
+@each $key, $val in $ls-map {
+  .u-ls#{$key} {
+    letter-spacing: ls($val);
+  }
+}
+
+// underline
+.u-underline {
+  text-decoration: underline;
+}
+
+// indent
+.u-indent {
+  text-indent: 1em;
+}
+
+.u-pre {
+  white-space: pre;
+}
+.u-nowrap {
+  white-space: nowrap;
+}
+.u-pre-wrap {
+  white-space: pre-wrap;
+}
+.u-pre-line {
+  white-space: pre-line;
+}
+
+@mixin _text($prefix) {
+  .#{$prefix}u-tategaki {
+    @include tategaki();
+  }
+
+  .#{$prefix}u-textleft {
+    text-align: left;
+  }
+  .#{$prefix}u-textcenter {
+    text-align: center;
+  }
+  .#{$prefix}u-textright {
+    text-align: right;
+  }
+  .#{$prefix}u-textjustify {
+    text-align: justify;
+  }
+
+  // 文字 末尾省略
+  .#{$prefix}u-text-overflow {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-overflow: "[...]";
+  }
+
+  .#{$prefix}u-line-clamp {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+  }
+  .#{$prefix}u-line-clamp--2 {
+    -webkit-line-clamp: 2;
+  }
+  .#{$prefix}u-line-clamp--3 {
+    -webkit-line-clamp: 3;
+  }
+
+  // white-space
+  .#{$prefix}u-nowrap {
+    white-space: nowrap;
+  }
+}
+
+@include _text("");
+
+@each $screen in $screen-list-min {
+  $prefix: str-slice($screen, 0, 1);
+
+  // $prefixBreak: "#{$prefix}\\:";
+  // @include break($screen) {
+  // }
+
+  $prefixOver: "#{to-upper-case($prefix)}\\:";
+  @include over($screen) {
+    @include _text($prefixOver);
+  }
+}
+
+/*! purgecss end ignore */

@@ -1,0 +1,135 @@
+/*////////////////////////////
+
+@layout/footer
+
+////////////////////////////*/
+// 【必須】variable, functions, mixins 読み込み
+@use '../foundation/variable' as *;
+@use '../foundation/functions' as *;
+@use '../foundation/mixins' as *;
+@use "../foundation/family";
+@use "sass:map"; // sassの機能
+/*! purgecss start ignore */
+
+.l-sidebar {
+}
+
+.l-sidebar-block {
+  background: color('white');
+  border-radius: radius('medium');
+  overflow: hidden;
+  box-shadow: 1.408px 2.649px 4.85px 0.15px rgba(0, 0, 0, 0.1);
+  padding: rem(5);
+}
+
+.l-sidebar-header {
+  display: flex;
+  flex-direction: column;
+  color: color('white');
+  background: color('theme');
+  border-radius: rem(8) rem(8) 0 0;
+  padding: rem(14) 0 0 rem(16);
+  position: relative;
+
+  &::before {
+    content: '';
+    display: block;
+    width: rem(90);
+    height: rem(4);
+    background: color('green');
+    position: absolute;
+    left: 0;
+    bottom: 0;
+  }
+
+  // .l-sidebar-header__sub
+  &__sub {
+    margin-left: auto;
+    margin-top: rem(7);
+    margin-bottom: rem(-2);
+  }
+}
+
+.l-sidebar-list {
+  font-size: rem(14);
+  line-height: 1.4;
+  font-weight: 500;
+
+  &[role="list"] {
+    padding: rem(5) rem(5) 0 rem(5);
+  }
+
+  > li {
+    & + li {
+      border-top: 1px dotted #000;
+    }
+
+    // &:last-child {
+    //   border-radius: 0 0 8px 8px;
+    // }
+
+    > a {
+      padding: rem(16) 0 rem(15) rem(32);
+    }
+
+    li {
+      border-top: 1px dotted #ccc;
+    }
+  }
+
+  li {
+    position: relative;
+  }
+
+  // .l-sidebar-list__i
+  &__i {
+    position: absolute;
+    color: color('theme');
+    top: 50%;
+    left: rem(7);
+    transform: translate3d(0, -50%, 0);
+    font-size: rem(13);
+  }
+
+  // reset
+  ul {
+    list-style: none;
+    text-indent: 0;
+    padding: 0;
+
+    li::before {
+      content: "\200B";
+      pointer-events: none;
+      position: absolute;
+    }
+  }
+
+  a {
+    display: block;
+    position: relative;
+    z-index: 1;
+    text-decoration: none;
+    transition: color .3s, background .3s;
+    padding: rem(8) 0 rem(8) rem(32);
+
+    &.is-current {
+      color: color("theme");
+    }
+
+    [class].c-icon {
+      position: absolute;
+      top: 50%;
+      right: 11px;
+      transform: translate3d(0, -50%, 0);
+    }
+
+    @include action() {
+      &[href] {
+        background: rgba(color("theme"), .1);
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+/*! purgecss end ignore */

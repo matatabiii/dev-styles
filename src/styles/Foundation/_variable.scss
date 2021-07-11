@@ -1,0 +1,129 @@
+/*////////////////////////////
+
+@変数設定
+
+////////////////////////////*/
+@use "sass:map"; // sassの機能
+@use "./family";
+
+$font-size: 16px !default;
+$gutter: 20px !default;
+
+// @Function color("theme")
+// @Utility  .u-text-font
+//           .u-bg-font
+$color-map: (
+  "transparent": transparent,
+  "black": #000,
+  "white": #fff,
+  "gray": #cccccc,
+  "theme": #3f51b5,
+  "primary": #ffc400,
+  "secondary": #00b0ff,
+  "tertiary": #f44336,
+  "text": #222222,
+  "text2": #333333,
+  "success": #28a745,
+  "danger": #ef4b4b,
+  "warning": #ffc107,
+) !default;
+
+// @Function width("desktop")
+$width-map: (
+  "max": 1400px,
+  "container": 1170px,
+  "large": 970px,
+  "medium": 770px,
+  "small": 570px,
+  "containerMainSub": 1080px,
+  "main": 1070px,
+  "sub": 330px,
+  "xl": 1280px,
+  "lg": 1024px,
+  "md": 768px,
+  "sm": 576px,
+) !default;
+
+// @Function height("header-desktop")
+$height-map: (
+  "header-desktop": 90px,
+  "header-sp": 70px,
+) !default;
+
+// @Function family("sans")
+// @Utility  .u-family-sans
+$family-map: (
+  "sans": map.get(family.$families, "noto"),
+  "serif": map.get(family.$families, "mincho"),
+  "roboto": map.get(family.$families, "roboto"),
+  "en": map.get(family.$families, "system"),
+) !default;
+
+/// カラー取得（スコープ）
+/// 取得できなかったら currentColor を返す
+/// @param  {string}  $key キー名
+/// @param  {boolean} $var CSSカスタム変数にするか
+/// @return {string}       カラーコード
+@function _color($key: null, $var: true) {@if map == type-of($color-map) and map.get($color-map, $key) {$color: map.get($color-map, $key);@if $var {@return var(--color-#{$key}, $color);} @else {@return $color;}}@return currentColor;}
+// ハンバーガーメニューの情報
+$trigger-style: (
+  "width": 70px,
+  "height": 70px,
+  "border": none,
+  "border-color": _color("text"),
+  "trigger-radius": 0,
+  "open-bg-color": _color("text"),
+  "open-line-color": _color("white"),
+  "open-label-color": _color("white"),
+  "close-bg-color": _color("text"),
+  "close-line-color": _color("white"),
+  "close-label-color": _color("white"),
+  "line-width": 30px,
+  "line-height": 2px,
+  "line-radius": 0px,
+  "line-space": 5px,
+) !default;
+
+
+// @Function space("50")
+$space-map: (
+  "0": 0,
+  "1": 1,
+  "2": 2,
+  "3": 3,
+  "4": 4,
+  "5": 5,
+  "6": 6,
+  "7": 7,
+  "8": 8,
+  "9": 9,
+  "10": 10,
+  "15": 15,
+  "20": 20,
+  "25": 25,
+  "30": 30,
+  "35": 35,
+  "40": 40,
+  "45": 45,
+  "50": 50,
+  "55": 55,
+  "60": 60,
+  "65": 65,
+  "70": 70,
+  "75": 75,
+  "80": 80,
+  "85": 85,
+  "90": 90,
+  "95": 95,
+  "100": 100,
+) !default;
+
+$text-decoration-static: none !default;
+$text-decoration-dynamic: underline !default;
+
+// @Function z-index("header")
+$index-list: ("footer", "nav", "content", "pagetop", "header", "drawer", "header-bar", "trigger", "loading", "debug") !default;
+
+// レスポンシブ変化のスクリーンのリスト (実数は $width-map にマッチする値を使用する)
+$screen-list: ("max", "container", "xl", "lg", "md", "sm") !default;
+$screen-list-min: ("lg", "md") !default;

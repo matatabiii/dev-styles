@@ -1,0 +1,67 @@
+/*////////////////////////////
+
+@layout/footer
+
+////////////////////////////*/
+// 【必須】variable, functions, mixins 読み込み
+@use '../foundation/variable' as *;
+@use '../foundation/functions' as *;
+@use '../foundation/mixins' as *;
+/*! purgecss start ignore */
+
+.l-footer {
+  // .l-footer__content
+  &__content {
+    border-top: 1px solid color("navy");
+  }
+
+  // l-footer__separate
+  &__separate {
+    border-top: 1px solid color("gray");
+  }
+
+  // .l-footer__bottom
+  &__bottom {
+    position: relative;
+
+    @include break("lg") {
+      margin-top: rem(110);
+    }
+
+    // .l-footer__bottom__pagetop
+    &__pagetop {
+      @include over("lg") {
+        width: rem(190);
+        margin: rem(-80) rem(-90) 0 0;
+        padding-left: rem(36);
+        padding-right: rem(22);
+      }
+
+      @include break("lg") {
+        position: absolute;
+        bottom: 100%;
+        right: 0;
+      }
+    }
+  }
+
+  @include break('md') {
+    // .l-footer__btn
+    &__btn {
+      flex-direction: column;
+      height: rem(150);
+      border-radius: 0;
+
+      .p-btn__label {
+        padding: 1em 0 .6em 0;
+      }
+
+      .p-btn__i {
+        height: 2em;
+        margin: 0 auto;
+      }
+    }
+  }
+}
+
+/*! purgecss end ignore */

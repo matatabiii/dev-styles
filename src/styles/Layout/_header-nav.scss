@@ -1,0 +1,54 @@
+/*////////////////////////////
+
+@layout/header-nav
+
+////////////////////////////*/
+// 【必須】variable, functions, mixins 読み込み
+@use '../foundation/variable' as *;
+@use '../foundation/functions' as *;
+@use '../foundation/mixins' as *;
+
+/*! purgecss start ignore */
+
+.l-header {
+  position: relative;
+  height: height("header-sp");
+  @include over("lg") {
+    height: height("header-desktop");
+  }
+}
+
+
+/// ヘッダーレイアウト
+.l-header-base {
+  display: flex;
+  height: height("header-sp");
+  position: relative;
+  z-index: z-index("header");
+  align-items: center;
+  justify-content: space-between;
+  background: color("white");
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+
+  @include over("lg") {
+    height: height("header-desktop");
+  }
+
+  // .l-header-base__logo
+  &__logo {
+  }
+
+  // .l-header-base__nav
+  &__nav {
+    @include over("lg") {
+      flex: 0 0 auto;
+      padding-right: rem(92);
+    }
+  }
+}
+
+
+/*! purgecss end ignore */

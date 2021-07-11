@@ -1,0 +1,36 @@
+/*////////////////////////////
+@utility/color
+////////////////////////////*/
+@use "sass:math";
+@use '../foundation/variable' as *;
+@use '../foundation/functions' as *;
+@use '../foundation/mixins' as *;
+
+/*! purgecss start ignore */
+
+$colorMap: $color-map; // _variable.scss で設定
+
+@mixin _colors($prefix: "") {
+  @each $key, $color in $colorMap {
+    .#{$prefix}u-#{$key} {
+      color: color($key);
+    }
+  }
+}
+
+@include _colors();
+
+// @each $screen in $screen-list-min {
+//   $prefix: str-slice($screen, 0, 1);
+
+//   // $prefixBreak: "#{$prefix}\\:";
+//   // @include break($screen) {
+//   // }
+
+//   $prefixOver: "#{to-upper-case($prefix)}\\:";
+//   @include over($screen) {
+//     @include _colors($prefixOver);
+//   }
+// }
+
+/*! purgecss end ignore */

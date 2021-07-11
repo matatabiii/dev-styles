@@ -1,0 +1,39 @@
+/*////////////////////////////
+
+@基本設定
+
+////////////////////////////*/
+@use "sass:map"; // sassの機能
+@use "sass:math";
+
+// 【必須】variable, functions, mixins 読み込み
+@use "./variable" as *;
+@use "./functions" as *;
+@use "./mixins" as *;
+
+/*! purgecss start ignore */
+html {
+  font-size: 62.5%;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+  @include over('md') {
+    font-size: math.div(16px , width("md")) * 62.5vw;
+  }
+
+  @include over('lg') {
+    font-size: math.div(16px , width("container")) * 62.5vw;
+  }
+
+  @include over('container') {
+    font-size: 62.5%;
+  }
+}
+
+body {
+  min-height: 100vh;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  font-size: var(--size, 1.6rem);
+}
+/*! purgecss end ignore */

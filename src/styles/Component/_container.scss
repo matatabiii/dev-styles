@@ -1,0 +1,34 @@
+/*////////////////////////////
+@component/container
+////////////////////////////*/
+@use 'sass:color';
+@use 'sass:math';
+@use '../foundation/variable' as *;
+@use '../foundation/functions' as *;
+@use '../foundation/mixins' as *;
+
+/*! purgecss start ignore */
+
+.c-container {
+  width: rem(width('container'));
+  max-width: calc(100% - 4rem);
+  margin-left: auto;
+  margin-right: auto;
+
+  @each $key, $val in $width-map {
+    $prefix: '--#{$key}';
+
+    @if $key != 'container' {
+      &#{$prefix} {
+        width: rem($val);
+      }
+    }
+  }
+
+  // .c-container--just
+  &--just {
+    max-width: 100%;
+  }
+}
+
+/*! purgecss end ignore */

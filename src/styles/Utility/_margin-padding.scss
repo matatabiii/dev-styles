@@ -1,0 +1,101 @@
+/*////////////////////////////
+@utility/space
+////////////////////////////*/
+@use "sass:math";
+@use '../foundation/variable' as *;
+@use '../foundation/functions' as *;
+@use '../foundation/mixins' as *;
+
+$spaceMap: $space-map;
+/*! purgecss start ignore */
+
+@mixin _space($prefix: "") {
+  @each $key, $value in $spaceMap {
+    .#{$prefix}u-mt-#{$key} { margin-top: rem($value); }
+    .#{$prefix}u-mr-#{$key} { margin-right: rem($value); }
+    .#{$prefix}u-mb-#{$key} { margin-bottom: rem($value); }
+    .#{$prefix}u-ml-#{$key} { margin-left: rem($value); }
+
+    @if $value != 0 {
+      @if $value <= 30 {
+        .#{$prefix}u-mt-_#{$key} { margin-top: rem(-$value); }
+        .#{$prefix}u-mr-_#{$key} { margin-right: rem(-$value); }
+        .#{$prefix}u-mb-_#{$key} { margin-bottom: rem(-$value); }
+        .#{$prefix}u-ml-_#{$key} { margin-left: rem(-$value); }
+      }
+    }
+
+    .#{$prefix}u-pt-#{$key} { padding-top: rem($value); }
+    .#{$prefix}u-pr-#{$key} { padding-right: rem($value); }
+    .#{$prefix}u-pb-#{$key} { padding-bottom: rem($value); }
+    .#{$prefix}u-pl-#{$key} { padding-left: rem($value); }
+  }
+
+  .#{$prefix}u-gutter {
+    padding-left: rem($gutter);
+    padding-right: rem($gutter);
+  }
+
+  .#{$prefix}u-gutter-all {
+    padding: rem($gutter);
+  }
+
+  .#{$prefix}u-m-auto { margin: auto; }
+  .#{$prefix}u-mt-auto { margin-top: auto; }
+  .#{$prefix}u-mr-auto { margin-right: auto; }
+  .#{$prefix}u-mb-auto { margin-bottom: auto; }
+  .#{$prefix}u-ml-auto { margin-left: auto; }
+}
+
+@include _space();
+
+$_screen-list-min: ("md");
+@each $screen in $_screen-list-min {
+  $prefix: str-slice($screen, 0, 1);
+
+  // $prefixBreak: "#{$prefix}\\:";
+  // @include break($screen) {
+  // }
+
+  $prefixOver: "#{to-upper-case($prefix)}\\:";
+  @include over($screen) {
+    @include _space($prefixOver);
+  }
+}
+$_screen-list-min: ("lg");
+@each $screen in $_screen-list-min {
+  $prefix: str-slice($screen, 0, 1);
+  $prefixOver: "#{to-upper-case($prefix)}\\:";
+  $prefixBreak: "#{$prefix}\\:";
+  @include break($screen) {
+    .#{$prefixBreak}u-m-0 { margin: 0; }
+    .#{$prefixBreak}u-mt-0 { margin-top: 0; }
+    .#{$prefixBreak}u-mr-0 { margin-right: 0; }
+    .#{$prefixBreak}u-mb-0 { margin-bottom: 0; }
+    .#{$prefixBreak}u-ml-0 { margin-left: 0; }
+    .#{$prefixBreak}u-p-0 { padding: 0; }
+    .#{$prefixBreak}u-pt-0 { padding-top: 0; }
+    .#{$prefixBreak}u-pr-0 { padding-right: 0; }
+    .#{$prefixBreak}u-pb-0 { padding-bottom: 0; }
+    .#{$prefixBreak}u-pl-0 { padding-left: 0; }
+  }
+  @include over($screen) {
+    .#{$prefixOver}u-m-0 { margin: 0; }
+    .#{$prefixOver}u-mt-0 { margin-top: 0; }
+    .#{$prefixOver}u-mr-0 { margin-right: 0; }
+    .#{$prefixOver}u-mb-0 { margin-bottom: 0; }
+    .#{$prefixOver}u-ml-0 { margin-left: 0; }
+    .#{$prefixOver}u-p-0 { padding: 0; }
+    .#{$prefixOver}u-pt-0 { padding-top: 0; }
+    .#{$prefixOver}u-pr-0 { padding-right: 0; }
+    .#{$prefixOver}u-pb-0 { padding-bottom: 0; }
+    .#{$prefixOver}u-pl-0 { padding-left: 0; }
+    .#{$prefixOver}u-m-auto { margin: auto; }
+    .#{$prefixOver}u-mt-auto { margin-top: auto; }
+    .#{$prefixOver}u-mr-auto { margin-right: auto; }
+    .#{$prefixOver}u-mb-auto { margin-bottom: auto; }
+    .#{$prefixOver}u-ml-auto { margin-left: auto; }
+  }
+}
+
+/*! purgecss end ignore */

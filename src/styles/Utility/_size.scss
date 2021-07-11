@@ -1,0 +1,35 @@
+/*////////////////////////////
+@utility/size
+////////////////////////////*/
+@use "sass:math";
+@use '../foundation/variable' as *;
+@use '../foundation/functions' as *;
+@use '../foundation/mixins' as *;
+
+$sizeMax: 50;
+/*! purgecss start ignore */
+
+@mixin _size($prefix: "") {
+  @for $i from 10 through $sizeMax {
+    .#{$prefix}u-size-#{$i} {
+      font-size: rem($i);
+    }
+  }
+}
+
+@include _size();
+
+$_screen-list-min: ("md");
+@each $screen in $_screen-list-min {
+  $prefix: str-slice($screen, 0, 1);
+
+  // $prefixBreak: "#{$prefix}\\:";
+  // @include break($screen) {
+  // }
+
+  $prefixOver: "#{to-upper-case($prefix)}\\:";
+  @include over($screen) {
+    @include _size($prefixOver);
+  }
+}
+/*! purgecss end ignore */

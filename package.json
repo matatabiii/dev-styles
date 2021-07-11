@@ -1,0 +1,27 @@
+{
+  "name": "dev-styles",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "mkdir -p src/assets/styles",
+    "postcss": "postcss dist/assets/styles/**/*.css --replace",
+    "sass": "sass src/styles:src/assets/styles",
+    "watch:sass": "sass src/styles:src/assets/styles --watch",
+    "watch:postcss": "postcss src/assets/styles/**/*.css --dir dist/assets/styles --watch --verbose",
+    "build:sass": "sass --no-source-map src/styles:dist/assets/styles && postcss dist/assets/styles/*.css --replace",
+    "start": "npm-run-all sass --parallel watch:*",
+    "build": "run-s build:* postcss"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^10.3.0",
+    "css-mqpacker": "^7.0.0",
+    "cssnano": "^5.0.6",
+    "npm-run-all": "^4.1.5",
+    "postcss-cli": "^8.3.1",
+    "sass": "^1.35.2"
+  }
+}

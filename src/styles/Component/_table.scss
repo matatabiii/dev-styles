@@ -1,0 +1,43 @@
+/*////////////////////////////
+@component/table
+////////////////////////////*/
+@use 'sass:color';
+@use 'sass:math';
+@use '../foundation/variable' as *;
+@use '../foundation/functions' as *;
+@use '../foundation/mixins' as *;
+
+
+@mixin _table($prefix: "") {
+  .#{$prefix}c-table-column {
+    &,
+    thead,
+    tbody,
+    tr,
+    th,
+    td {
+      display: block;
+      width: 100%;
+    }
+    th,
+    td {
+      width: 100% !important;
+    }
+  }
+}
+
+// @include _table();
+
+@each $screen in $screen-list-min {
+  $prefix: str-slice($screen, 0, 1);
+
+  $prefixBreak: "#{$prefix}\\:";
+  @include break($screen) {
+    @include _table($prefixBreak);
+  }
+
+  // $prefixOver: "#{to-upper-case($prefix)}\\:";
+  // @include over($screen) {
+  //   @include _scrollArea($prefixOver);
+  // }
+}

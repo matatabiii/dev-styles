@@ -1,0 +1,55 @@
+/*////////////////////////////
+@utility/height
+////////////////////////////*/
+@use "sass:math";
+@use '../foundation/variable' as *;
+@use '../foundation/functions' as *;
+@use '../foundation/mixins' as *;
+
+$_heightMax: 500;
+$_heightMax: math.div($_heightMax, 5);
+
+// height
+@mixin _height($prefix) {
+  .#{$prefix}u-h-1 { height: rem(1); }
+  .#{$prefix}u-h-2 { height: rem(2); }
+  .#{$prefix}u-h-3 { height: rem(3); }
+  .#{$prefix}u-h-4 { height: rem(4); }
+  .#{$prefix}u-h-5 { height: rem(5); }
+  .#{$prefix}u-h-6 { height: rem(6); }
+  .#{$prefix}u-h-7 { height: rem(7); }
+  .#{$prefix}u-h-8 { height: rem(8); }
+  .#{$prefix}u-h-9 { height: rem(9); }
+  @for $var from 2 through $_heightMax {
+    $px: $var * 5;
+    .#{$prefix}u-h-#{$px} {
+      height: rem($px);
+    }
+  }
+  .#{$prefix}u-h-auto { height: auto; }
+  .#{$prefix}u-h-full { height: 100%; }
+}
+
+// @mixin _heightOther($prefix) {
+//   @for $var from 1 through $_heightMax {
+//     $px: $var * 5;
+//     .#{$prefix}u-h-#{$px} {
+//       height: rem($px);
+//     }
+//   }
+// }
+
+@include _height("");
+
+@each $screen in $screen-list-min {
+  $prefix: str-slice($screen, 0, 1);
+
+  // $prefixBreak: "#{$prefix}\\:";
+  // @include break($screen) {
+  // }
+
+  $prefixOver: "#{to-upper-case($prefix)}\\:";
+  @include over($screen) {
+    @include _height($prefixOver);
+  }
+}

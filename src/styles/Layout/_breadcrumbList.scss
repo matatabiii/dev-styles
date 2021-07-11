@@ -1,0 +1,100 @@
+/*////////////////////////////
+
+@layout/breadcrumbList
+
+////////////////////////////*/
+// 【必須】variable, functions, mixins 読み込み
+@use '../foundation/variable' as *;
+@use '../foundation/functions' as *;
+@use '../foundation/mixins' as *;
+/*! purgecss start ignore */
+
+.l-breadcrumbList {
+  background: color("text");
+  color: color("white");
+  white-space: nowrap;
+  position: relative;
+  z-index: 1;
+  font-size: rem(13);
+  font-weight: 600;
+
+  @include break("md") {
+    font-size: rem(12);
+  }
+
+  // .l-breadcrumbList__inner
+  &__inner {
+    width: rem(1170px + $gutter + $gutter);
+    padding: 0 $gutter;
+    margin: 0 auto;
+    max-width: 100%;
+  }
+
+  // &::before {
+  //   content: "";
+  //   display: block;
+  //   height: 100%;
+  //   width: 5em;
+  //   position: absolute;
+  //   z-index: 1;
+  //   right: 0;
+  //   top: 0;
+  //   pointer-events: none;
+  //   background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(#fff,1) 100%);
+  // }
+
+  // .l-breadcrumbList__container
+  &__container {
+    overflow: auto;
+    -ms-overflow-style: none; /* IE, Edge 対応 */
+    scrollbar-width: none; /* Firefox 対応 */
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  // .l-breadcrumbList__list
+  &__list {
+    display: flex;
+    height: rem(45);
+    align-items: center;
+  }
+
+  // .l-breadcrumbList__item
+  &__item {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+
+    &:not(:last-child) {
+      &:after {
+        content: "＞";
+        flex: 0 0 auto;
+        padding: 0 em(13px, 10px);
+        font-size: em(10px, 13px);
+
+        @include break("md") {
+          padding: 0 em(8px, 10px);
+        }
+      }
+    }
+
+    [href] {
+      transition: opacity .3s ease-in-out;
+
+      @include action() {
+        opacity: 0.7;
+      }
+    }
+  }
+
+  // .l-breadcrumbList__link
+  &__link {
+    display: flex;
+    align-items: center;
+    flex: 0 1 auto;
+  }
+}
+
+/*! purgecss end ignore */
